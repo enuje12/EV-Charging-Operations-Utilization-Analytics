@@ -1,209 +1,102 @@
 # EV Charging Operations & Utilization Analytics
 
-An end-to-end analytics project using real-world EV charging transaction data to analyze charging demand, charger performance, location-level activity, time-based demand patterns, and user behavior using MySQL and Power BI.
+An end-to-end analytics project using MySQL and Power BI to analyze 72,856 EV charging sessions, uncover demand patterns, evaluate charger utilization, and identify opportunities for more effective charging infrastructure planning.
 
-## Business Problem
+## Problem Statement
 
-As EV adoption increases, charging operators need to understand how their charging infrastructure is being used.
+As electric vehicle adoption grows, charging operators need to understand how charging demand varies across locations, charger types, time periods, and users to make informed infrastructure and operational decisions.
 
-This project addresses key operational questions:
+This project investigates where demand is concentrated, when charging activity peaks, which chargers handle the highest demand, and how demand is distributed across users. The objective is to identify utilization patterns and translate them into actionable insights for capacity planning, charger prioritization, and operational efficiency.
 
-- Where is charging demand concentrated?
-- When does charging demand peak?
-- Which chargers handle the highest demand?
-- Which locations have the highest charging activity?
-- How does demand vary across charger types?
-- How does charging activity change over time?
-- How concentrated is demand across users?
+## Key Findings and Insights
 
-The analysis aims to support better charging infrastructure planning, capacity management, charger prioritization, and operational decision-making.
+### **1. Charging Demand Concentration by Charger Type**
 
-## Dataset
+Type 0 chargers accounted for approximately **77.7% of total demand**, compared with 22.3% for Type 1 chargers. This substantial difference highlights the importance of evaluating charger deployment against observed usage patterns.
 
-### Source
+### **2. Evening Peak Demand**
 
-The dataset used in this project is:
+Evening Peak accounted for **41.79% of total demand**, followed closely by Off-Peak at 41.37%. Morning Peak contributed 16.84%. Evening Peak also recorded the highest average demand per session at 19.59, while Off-Peak had the highest session volume, with 31,942 sessions.
 
-**A dataset for multi-faceted analysis of electric vehicle charging transactions**
+### **3. User Demand Concentration**
 
-Authors: Keon Baek, Eunjung Lee, and Jinho Kim
+SQL window functions and demand-decile segmentation revealed that the top 10% of users accounted for approximately **78.64% of total demand**. This concentration highlights the importance of understanding high-demand user segments when assessing charging utilization.
 
-Published in Scientific Data, 2024.
+### **4. Location-Level Demand**
 
-The dataset contains real-world commercial EV charging transactions collected in South Korea over the period from September 30, 2021 to September 30, 2022.
+Apartments recorded the highest total demand at 263,163.46, while Public Areas recorded the highest session volume at 14,082. These findings show why infrastructure planning should consider both total demand and charging frequency.
 
-Dataset statistics:
+### **5. Monthly Charging Trends**
 
-- 72,856 charging sessions
-- 2,337 users
-- 2,119 chargers
-- 13 variables
-
-Source:
-https://doi.org/10.1038/s41597-024-02942-9
-
-Dataset:
-https://figshare.com/articles/dataset/A_dataset_for_multi-faceted_analysis_of_electric_vehicle_charging_transactions/22495141
-
-License: CC BY 4.0
-
-### Dataset Description
-
-Each row represents an individual EV charging session.
-
-| Column | Description |
-|---|---|
-| UserID | Identifier for the EV user |
-| ChargerID | Identifier for the charger |
-| ChargerCompany | Charger company identifier |
-| Location | Charging location category |
-| ChargerType | Charger type identifier |
-| StartDay | Charging session start date |
-| StartTime | Charging session start time |
-| EndDay | Charging session end date |
-| EndTime | Charging session end time |
-| StartDatetime | Combined charging start date and time |
-| EndDatetime | Combined charging end date and time |
-| Duration | Charging session duration |
-| Demand | Energy demand during the session |
-
-UserID = 0 represents customers who were not subscribed to the commercially operated company in the original dataset.
-
-## Analytical Approach
-
-The project was divided into SQL-based analysis and Power BI visualization.
-
-### SQL Analysis
-
-MySQL was used to perform operational, temporal, and behavioral analysis.
-
-The analysis included:
-
-1. High-demand charger analysis
-2. Demand share by location
-3. Top users by demand contribution
-4. Peak vs. off-peak charging demand
-5. Monthly charging demand trends
-6. Charger performance ranking by location
-7. User activity trends using LAG()
-8. Demand concentration by user decile
-
-SQL techniques used include:
-
-- Aggregations
-- GROUP BY
-- HAVING
-- Subqueries
-- Common Table Expressions
-- Window functions
-- RANK()
-- LAG()
-- NTILE()
-- Date and time functions
-- Percentage calculations
+Charging demand peaked in August 2022, reaching 143,041.27 across 8,083 sessions. Monthly trend analysis helps identify periods of higher utilization and supports capacity planning.
 
 ## Power BI Dashboard
 
-The analysis was translated into an interactive Power BI dashboard containing:
+The interactive dashboard summarizes charging activity through KPI cards and six analytical visuals.
 
-### KPI Metrics
+![EV Charging Operations & Utilization Analytics](ev_Dashboard.png)
 
-- Total Sessions
-- Total Users
-- Total Chargers
-- Total Demand
-- Average Demand per Session
+## Methodology
 
-### Dashboard Visuals
+1. **Data Loading:** Imported the charging transaction dataset into MySQL and reviewed its structure and data types.
+2. **Exploratory Data Analysis:** Examined session volumes, demand distributions, charger activity, location categories, and user identifiers.
+3. **SQL-Based Risk and Operations Analysis:** Performed eight SQL analyses covering charger performance, location-level demand, user contributions, time-based demand, monthly trends, charger rankings, user activity trends, and demand concentration.
+4. **Analytical Segmentation:** Categorized charging periods and segmented users into demand deciles using SQL window functions.
+5. **KPI Development:** Created DAX measures and a calculated column to support dashboard metrics and time-period analysis.
+6. **Dashboard Development:** Built an interactive Power BI dashboard to present key metrics, comparisons, and trends.
 
-- Monthly Charging Demand
-- Demand by Location
-- Charging Demand by Time Period
-- Top 10 Chargers by Demand
-- Demand by Charger Type
-- Charging Sessions by Location
+## SQL Analysis
 
-## Dashboard Preview
+MySQL was used to conduct eight analyses:
 
-![EV Charging Operations & Utilization Analytics](ev_dashboard.png)
+- High-demand charger analysis
+- Demand share by location
+- Top users by demand contribution
+- Peak versus off-peak charging demand
+- Monthly charging demand trends
+- Charger performance ranking within locations
+- User activity trends using `LAG()`
+- Demand concentration by user decile using `NTILE(10)`
 
-## Key Findings
+SQL techniques included aggregations, `GROUP BY`, `HAVING`, subqueries, common table expressions (CTEs), window functions, `RANK()`, `LAG()`, `NTILE()`, date and time functions, and percentage calculations.
 
-### Demand concentration by location
+## Business Implications
 
-Apartment and public-area locations account for some of the highest levels of charging demand, indicating that charging activity is not evenly distributed across locations.
+- **Infrastructure expansion:** Prioritize locations with consistently high demand and session volumes, particularly apartments and public charging areas.
+- **Peak-period capacity planning:** Evaluate capacity during evening peak hours while considering the substantial demand that also occurs outside peak periods.
+- **Charger performance monitoring:** Identify heavily utilized chargers for preventive maintenance, reliability monitoring, and capacity assessment.
+- **Charger deployment:** Use observed demand differences between charger types to inform future deployment decisions.
+- **User segmentation:** Examine high-demand user groups to better understand utilization concentration and potential customer usage patterns.
+- **Operational planning:** Combine demand volume, session frequency, and monthly trends rather than relying on a single metric when making infrastructure decisions.
 
-### Peak charging demand
+## Limitations
 
-Evening Peak represents the largest single share of demand at approximately 41.8%, closely followed by Off-Peak demand at approximately 41.4%. Morning Peak contributes approximately 16.8%.
+- The dataset covers commercial EV charging sessions in South Korea from September 30, 2021, to September 30, 2022; findings may not generalize to other markets or periods.
+- `UserID = 0` represents unsubscribed customers in the original dataset and should not be interpreted as one individual user.
+- Charger type and location categories are analyzed as provided in the dataset; their underlying technical specifications are not established by this analysis.
+- The analysis is primarily descriptive. Observed patterns identify associations and concentrations but do not establish causation or prove future demand.
+- Demand concentration and historical utilization patterns alone are insufficient to determine the optimal location or capacity for new charging infrastructure.
 
-### Charger demand variation
+## Conclusion
 
-Demand varies substantially across individual chargers, with a relatively small group of chargers handling significantly higher demand than others.
-
-### Charger type demand
-
-One charger type accounts for approximately 78% of total demand, while the other contributes approximately 22%, indicating a substantial difference in usage between charger types.
-
-### Location-level charging activity
-
-Public-area and apartment locations record some of the highest numbers of charging sessions, highlighting their importance for charging infrastructure planning.
-
-### Monthly demand trends
-
-Charging demand varies considerably throughout the year, with higher demand observed around the August–September period.
-
-## Business Recommendations
-
-### Prioritize high-demand locations
-
-Infrastructure expansion should focus on locations with consistently high charging demand and session activity.
-
-### Plan for evening demand
-
-Operators should evaluate capacity during evening peak periods and consider demand-management strategies such as time-based pricing, off-peak incentives, and load management.
-
-### Monitor high-demand chargers
-
-High-demand chargers should receive greater attention for preventive maintenance, reliability monitoring, capacity assessment, and potential upgrades.
-
-### Align charger deployment with demand
-
-The significant difference in demand between charger types suggests that future infrastructure deployment should be guided by actual usage patterns.
-
-### Use demand and session volume together
-
-Locations with both high demand and high session volumes can be prioritized when evaluating future infrastructure investments.
+This project combines MySQL-based operational and behavioral analysis with Power BI visualization to examine EV charging utilization across 72,856 sessions. The findings highlight differences in demand by charger type, location, time period, and user segment. By translating these patterns into actionable metrics and recommendations, the project demonstrates how data analytics can support evidence-based charging infrastructure planning and operational decision-making.
 
 ## Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| MySQL | Database management and SQL analysis |
-| SQL | Operational, temporal, and behavioral analysis |
-| Power BI | Dashboard development and visualization |
-| DAX | Measures and calculated columns |
-| GitHub | Project documentation and portfolio presentation |
+MySQL, SQL, Power BI, DAX, GitHub
 
-## Project Workflow
+## Data Source
 
-```text
-Raw EV Charging Dataset
-        |
-        v
-      MySQL
-        |
-        v
-   SQL Analysis
-        |
-        v
-    DAX Measures
-        |
-        v
-    Power BI
-        |
-        v
- Interactive Dashboard
-        |
-        v
-Business Insights & Recommendations
+**Dataset:** A dataset for multi-faceted analysis of electric vehicle charging transactions
+
+**Authors:** Keon Baek, Eunjung Lee, and Jinho Kim
+
+**Publication:** *Scientific Data* (2024)
+
+**Research DOI:** https://doi.org/10.1038/s41597-024-02942-9
+
+**Dataset:** https://figshare.com/articles/dataset/A_dataset_for_multi-faceted_analysis_of_electric_vehicle_charging_transactions/22495141
+
+**License:** CC BY 4.0
+
+The dataset contains 72,856 commercial EV charging sessions collected in South Korea between September 30, 2021, and September 30, 2022. Each row represents an individual charging session and includes user, charger, location, time, duration, and demand information.
