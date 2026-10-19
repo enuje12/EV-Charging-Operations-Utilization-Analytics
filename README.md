@@ -34,7 +34,7 @@ Charging demand peaked in August 2022, reaching 143,041.27 across 8,083 sessions
 
 The interactive dashboard summarizes charging activity through KPI cards and six analytical visuals.
 
-![EV Charging Operations & Utilization Analytics](ev_Dashboard.png)
+![EV Charging Operations & Utilization Analytics](ev_dashboard.png)
 
 ## Methodology
 
